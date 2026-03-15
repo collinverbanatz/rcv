@@ -1,0 +1,1 @@
+This project was developed as part of a Special Problems course to address the need for a flexible, non-linear rigging workflow. Unlike static auto-riggers, this system utilizes a Guide-Build architecture. This allows technical artists to refine joint placement and orientation in a "guide state" before committing to the final skeletal and control structure.
