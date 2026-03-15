@@ -1,0 +1,19 @@
+[project]
+name = "nmrig"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "maya-stubs>=0.4.2",
+]
+
+[tool.pyright]
+extraPaths = [
+    "/usr/autodesk/ApplicationPlugins/ngskintools2/Contents/scripts",
+]
+
+[tool.ty.environment]
+extra-paths = [
+    "/usr/autodesk/ApplicationPlugins/ngskintools2/Contents/scripts",
+]

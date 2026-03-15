@@ -1,0 +1,58 @@
+import maya.cmds as cmds
+import nmrig.build.buildPart as nmPart
+from ngSkinTools2 import api as ng
+import nmrig.libs.skin as nmSkin
+
+def build_character(model_path, guide_path, weight_path=None):
+    # import maya.cmds as cmds
+    # import nmrig.build.buildPart as nmPart
+
+    cmds.file(new=True, f=True)
+
+    root = nmPart.build_module(
+        module_type='root',
+        side='Cn',
+        part='root',
+        model_path=model_path,
+        guide_path=guide_path
+    )
+
+    # build arms
+    for s in ['Lf', 'Rt']:
+        fs = 'mixamorig:Left' if s == 'Lf' else 'mixamorig:Right'
+
+        nmPart.build_module(
+            module_type='bipedLimb',
+            side=s,
+            part='arm',
+            guide_list=[fs + 'Arm', fs + 'ForeArm', fs + 'Hand']
+        )
+
+    # build legs
+    for s in ['Lf', 'Rt']:
+        fs = 'mixamorig:Left' if s == 'Lf' else 'mixamorig:Right'
+
+        nmPart.build_module(
+            module_type='bipedLimb',
+            side=s,
+            part='leg',
+            guide_list=[fs + 'UpLeg', fs + 'Leg', fs + 'Foot']
+        )
+
+    # AFTER everything exists
+    if weight_path:
+        bind_and_import_weights(weight_path)
+
+def bind_and_import_weights(weight_path):
+    joints = cmds.skinCluster(joints,
+                            mesh,
+                            toSelectedBones=True,
+                            bindMethod=0,
+                            normalizeWeights=1)[0]
+
+    skin = ng.initlayers(mesh)
+
+    with open(weight_path, 'r') as f:
+        data = f.read()
+
+    skin.import_json(data)
