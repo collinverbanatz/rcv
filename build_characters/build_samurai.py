@@ -11,10 +11,20 @@ reload(nmSkin)
 reload(ng)
 
 def build():
-    np = r"/run/media/collindv/KINGSTON/Special_problems/tutorial2/Geo/samurai_002.mb"
-    gp = r"/run/media/collindv/KINGSTON/Special_problems/tutorial2/Geo/samurai_guides_004.mb"
-    sw = Path("/run/media/collindv/KINGSTON/Special_problems/tutorial2/Geo/samurai_skin_002.json")
-    clothes = Path("/run/media/collindv/KINGSTON/Special_problems/tutorial2/Geo/samurai_skin_clothes_001.json")
+    # np = r"/run/media/collindv/KINGSTON/Special_problems/tutorial2/Geo/samurai_002.mb"
+    # gp = r"/run/media/collindv/KINGSTON/Special_problems/tutorial2/Geo/samurai_guides_004.mb"
+    # sw = Path(
+    #     "/run/media/collindv/KINGSTON/Special_problems/tutorial2/Geo/samurai_skin_003.json"
+    # )
+    # clothes = Path("/run/media/collindv/KINGSTON/Special_problems/tutorial2/Geo/samurai_skin_clothes_001.json")
+
+    #windows
+    np = r"D:\Special_problems\tutorial2\Geo\samurai_002.mb"
+    gp = r"D:\Special_problems\tutorial2\Geo\samurai_guides_004.mb"
+    sw = Path(r"D:\Special_problems\tutorial2\Geo\samurai_skin_003.json")
+    clothes = Path(r"D:\Special_problems\tutorial2\Geo\samurai_skin_clothes_001.json")
+
+
     cmds.file(new=True, f=True)
 
     root = nmPart.build_module(

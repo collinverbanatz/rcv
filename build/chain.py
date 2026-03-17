@@ -206,7 +206,34 @@ class Chain:
             self.split_jnt_dict[bone] = split_jnts  
 
     def split_bone(self, bone, segments=4):
-        pass
+        pad = len(str(segments)) + 1
+
+        # find the start and end joint positions
+        end_jnt = cmds.listRelatives(bone, children=True, type="joint")[0]
+        s = cmds.xform(bone, query=True, worldSpace=True, translation=True)
+        e = cmds.xform(end_jnt, query=True, worldSpace=True, translation=True)
+
+        split_jnts = []
+        n = segments
+
+        for i in range(1, n + 1):
+            name_list = [
+                bone.replace(self.suffix, ""),
+                "seg",
+                str(i).zfill(pad),
+                self.suffix,
+            ]
+            seg_name = "_".join(name_list)
+            seg_jnt = cmds.joint(bone, name=seg_name)
+            if i > 1:
+                # find the position of our joint segment
+                seg_pos = [
+                    s[axis] + ((i - 1) * ((e[axis] - s[axis]) / n)) for axis in range(3)
+                ]
+                cmds.xform(seg_jnt, worldSpace=True, translation=seg_pos)
+            split_jnts.append(seg_jnt)
+
+        return split_jnts
 
     def bend_chain(self, bone, ctrl_scale, spans=16, mirror=False,
                     global_scale=None):

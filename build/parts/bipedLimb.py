@@ -160,16 +160,16 @@ class BipedLimb(nmModule.RigModule, nmIk.Ik, nmFk.FK):
                              self.fk_ctrls[0].top + '.visibility')
             cmds.connectAttr(rev + '.outputZ', self.ik_ctrl_grp + '.visibility')
 
-            #add in the segments, twisty, and bendy 
+            # add in the segments, twisty, and bendy
 
-        # if self.segments:
-        #     self.src_chain.split_chain(segments=self.segments)
-        #     self.src_joints = []
-        #     for jnt in self.src_chain.joints[:-1]:
-        #         split_list = self.src_chain.split_jnt_dict[jnt]
-        #         for s_jnt in split_list:
-        #             self.src_joints.append(s_jnt)
-        #     self.src_joints.append(self.src_chain.joints[-1])
+        if self.segments:
+            self.src_chain.split_chain(segments=self.segments)
+            self.src_joints = []
+            for jnt in self.src_chain.joints[:-1]:
+                split_list = self.src_chain.split_jnt_dict[jnt]
+                for s_jnt in split_list:
+                    self.src_joints.append(s_jnt)
+            self.src_joints.append(self.src_chain.joints[-1])
 
         # if self.twisty:
         #     # up limb

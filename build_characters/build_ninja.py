@@ -15,9 +15,15 @@ reload(ng)
 reload(nmFile)
 
 def build():
-    np = r"/run/media/collindv/KINGSTON/Special_problems/tutorial2/Geo/model_geo.mb"
-    gp = r"/run/media/collindv/KINGSTON/Special_problems/tutorial2/Geo/guides_002.mb"
-    sw = Path("/run/media/collindv/KINGSTON/Special_problems/tutorial2/Geo/ninja_skin_005.json")
+    # np = r"/run/media/collindv/KINGSTON/Special_problems/tutorial2/Geo/model_geo.mb"
+    # gp = r"/run/media/collindv/KINGSTON/Special_problems/tutorial2/Geo/guides_002.mb"
+    # sw = Path("/run/media/collindv/KINGSTON/Special_problems/tutorial2/Geo/ninja_skin_005.json")
+
+    #windows
+    np = r"D:\Special_problems\tutorial2\Geo\model_geo.mb"
+    gp = r"D:\Special_problems\tutorial2\Geo\guides_002.mb"
+    sw = Path(r"D:\Special_problems\tutorial2\Geo\ninja_skin_005.json")
+
     cmds.file(new=True, f=True)
 
     root = nmPart.build_module(
