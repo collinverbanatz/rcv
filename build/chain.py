@@ -235,6 +235,48 @@ class Chain:
 
         return split_jnts
 
+    def twist_chain(
+        self,
+        start_translate,
+        start_rotate,
+        end_translate,
+        end_rotate,
+        twist_bone,
+        twist_driver,
+        reverse=False,
+    ):
+        # load quatnodes if not already loaded
+        if not cmds.pluginInfo("quatNodes", query=True, loaded=True):
+            cmds.loadPlugin("quatNodes")
+
+        twist_name = twist_bone.replace("_JNT", "")
+        twist_loc = cmds.spaceLocator(name=twist_name + "_twist_LOC")[0]
+        driver_loc = cmds.spaceLocator(name=twist_name + "_twist_driver_LOC")[0]
+        cmds.hide(twist_loc, driver_loc)
+
+        # move twist locator to twist driver position and twist bone orientation
+        cmds.matchTransform(twist_loc, start_translate, rotation=False, position=True)
+        cmds.matchTransform(twist_loc, start_rotate, rotation=True, position=False)
+        cmds.parent(twist_loc, twist_bone)
+
+        # match driver_loc position to twist_loc and parent it under driver node
+        cmds.matchTransform(driver_loc, end_translate, rotation=False, position=True)
+        cmds.matchTransform(driver_loc, end_rotate, rotation=True, position=False)
+        cmds.parent(driver_loc, twist_driver)
+
+        # create the matrix and euler node to drive twist_loc
+        mult = cmds.createNode("multMatrix", name=twist_name + "_MMX")
+        dcm = cmds.createNode("decomposeMatrix", name=twist_name + "_DCM")
+        qte = cmds.createNode("quatToEuler", name=twist_name + "_QTE")
+
+        cmds.connectAttr(driver_loc + ".worldMatrix[0]", mult + ".matrixIn[0]")
+        cmds.connectAttr(twist_loc + ".parentInverseMatrix[0]", mult + ".matrixIn[1]")
+        cmds.connectAttr(mult + ".matrixSum", dcm + ".inputMatrix")
+        cmds.connectAttr(dcm + ".outputQuatY", qte + ".inputQuatY")
+        cmds.connectAttr(dcm + ".outputQuatW", qte + ".inputQuatW")
+        cmds.connectAttr(qte + ".outputRotateY", twist_loc + ".rotateY")
+        cmds.setAttr(qte + ".inputRotateOrder", 1)
+
     def bend_chain(self, bone, ctrl_scale, spans=16, mirror=False,
                     global_scale=None):
             if mirror:

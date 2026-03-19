@@ -82,14 +82,13 @@ class Ikchain(nmModule.RigModule, nmIk.Ik):
         if self.twisty:
             self.ik_chain.twist_chain(
                 start_translate=self.ik_chain.joints[1],
-                start_rotate=self.ikchain.joints[0],
+                start_rotate=self.ik_chain.joints[0],
                 end_translate=self.ik_chain.joints[0],
                 end_rotate=self.ik_chain.joints[0],
                 twist_bone=self.ik_chain.joints[0],
                 twist_driver=self.base_ctrl.ctrl,
                 reverse=True,
             )
-
             self.ik_chain.twist_chain(
                 start_translate=self.ik_chain.joints[2],
                 start_rotate=self.ik_chain.joints[1],
