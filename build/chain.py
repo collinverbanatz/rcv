@@ -277,6 +277,18 @@ class Chain:
         cmds.connectAttr(qte + ".outputRotateY", twist_loc + ".rotateY")
         cmds.setAttr(qte + ".inputRotateOrder", 1)
 
+        ti = 1 / float(len(self.split_jnt_dict[twist_bone]))
+        t_val = ti
+        for jnt in self.split_jnt_dict[twist_bone]:
+            twist_percent = t_val - ti
+            if reverse:
+                twist_percent = 1 - twist_percent
+            mdl = cmds.createNode("multDL", name=jnt + "_twist_MDL")
+            cmds.connectAttr(twist_loc + ".rotateY", mdl + ".input1")
+            cmds.setAttr(mdl + ".input2", twist_percent)
+            cmds.connectAttr(mdl + ".output", jnt + ".rotateY")
+            t_val += ti
+
     def bend_chain(self, bone, ctrl_scale, spans=16, mirror=False,
                     global_scale=None):
             if mirror:
