@@ -171,22 +171,26 @@ class BipedLimb(nmModule.RigModule, nmIk.Ik, nmFk.FK):
                     self.src_joints.append(s_jnt)
             self.src_joints.append(self.src_chain.joints[-1])
 
-        # if self.twisty:
-        #     # up limb
-        #     self.src_chain.twist_chain(start_translate=self.src_chain.joints[1],
-        #                                start_rotate=self.src_chain.joints[0],
-        #                                end_translate=self.src_chain.joints[0],
-        #                                end_rotate=self.src_chain.joints[0],
-        #                                twist_bone=self.src_chain.joints[0],
-        #                                twist_driver=up_twist,
-        #                                reverse=True)
-        #     # lo limb
-        #     self.src_chain.twist_chain(start_translate=self.src_chain.joints[2],
-        #                                start_rotate=self.src_chain.joints[1],
-        #                                end_translate=self.src_chain.joints[2],
-        #                                end_rotate=self.src_chain.joints[1],
-        #                                twist_bone=self.src_chain.joints[1],
-        #                                twist_driver=lo_twist)
+        if self.twisty:
+            # up limb
+            self.src_chain.twist_chain(
+                start_translate=self.src_chain.joints[1],
+                start_rotate=self.src_chain.joints[0],
+                end_translate=self.src_chain.joints[0],
+                end_rotate=self.src_chain.joints[0],
+                twist_bone=self.src_chain.joints[0],
+                twist_driver=up_twist,
+                reverse=True,
+            )
+            # lo limb
+            self.src_chain.twist_chain(
+                start_translate=self.src_chain.joints[2],
+                start_rotate=self.src_chain.joints[1],
+                end_translate=self.src_chain.joints[2],
+                end_rotate=self.src_chain.joints[1],
+                twist_bone=self.src_chain.joints[1],
+                twist_driver=lo_twist,
+            )
 
         # if self.bendy:
         #     if self.side == 'Rt':

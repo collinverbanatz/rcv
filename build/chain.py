@@ -272,9 +272,9 @@ class Chain:
         cmds.connectAttr(driver_loc + ".worldMatrix[0]", mult + ".matrixIn[0]")
         cmds.connectAttr(twist_loc + ".parentInverseMatrix[0]", mult + ".matrixIn[1]")
         cmds.connectAttr(mult + ".matrixSum", dcm + ".inputMatrix")
-        cmds.connectAttr(dcm + ".outputQuatY", qte + ".inputQuatY")
+        cmds.connectAttr(dcm + ".outputQuatX", qte + ".inputQuatX")
         cmds.connectAttr(dcm + ".outputQuatW", qte + ".inputQuatW")
-        cmds.connectAttr(qte + ".outputRotateY", twist_loc + ".rotateY")
+        cmds.connectAttr(qte + ".outputRotateX", twist_loc + ".rotateX")
         cmds.setAttr(qte + ".inputRotateOrder", 1)
 
         ti = 1 / float(len(self.split_jnt_dict[twist_bone]))
@@ -284,9 +284,9 @@ class Chain:
             if reverse:
                 twist_percent = 1 - twist_percent
             mdl = cmds.createNode("multDL", name=jnt + "_twist_MDL")
-            cmds.connectAttr(twist_loc + ".rotateY", mdl + ".input1")
+            cmds.connectAttr(twist_loc + ".rotateX", mdl + ".input1")
             cmds.setAttr(mdl + ".input2", twist_percent)
-            cmds.connectAttr(mdl + ".output", jnt + ".rotateY")
+            cmds.connectAttr(mdl + ".output", jnt + ".rotateX")
             t_val += ti
 
     def bend_chain(self, bone, ctrl_scale, spans=16, mirror=False,
