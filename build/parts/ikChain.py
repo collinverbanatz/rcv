@@ -99,6 +99,19 @@ class Ikchain(nmModule.RigModule, nmIk.Ik):
             )
 
         # add in the bendy
+        if self.bendy:
+            bend_01 = self.ik_chain.bend_chain(
+                bone=self.ik_chain.joints[0],
+                ctrl_scale=self.ctrl_scale,
+                global_scale=self.global_scale.attr,
+            )
+            bend_02 = self.ik_chain.bend_chain(
+                bone=self.ik_chain.joints[1],
+                ctrl_scale=self.ctrl_scale,
+                global_scale=self.global_scale.attr,
+            )
+            cmds.parent(bend_01["control"], bend_02["control"], self.control_grp)
+            cmds.parent(bend_01["module"], bend_02["module"], self.module_grp)
 
         self.build_ikh(scale_attr=self.global_scale)
         cmds.parent(self.ikh, self.ik_joints[0], self.module_grp)

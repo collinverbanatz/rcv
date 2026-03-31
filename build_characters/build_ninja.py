@@ -21,7 +21,7 @@ def build():
         "/run/media/collindv/KINGSTON/Special_problems/tutorial2/Geo/ninja_skin_005.json"
     )
 
-    #windows
+    # windows
     # np = r"D:\Special_problems\tutorial2\Geo\model_geo.mb"
     # gp = r"D:\Special_problems\tutorial2\Geo\guides_002.mb"
     # sw = Path(r"D:\Special_problems\tutorial2\Geo\ninja_skin_005.json")

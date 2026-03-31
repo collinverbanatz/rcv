@@ -192,22 +192,25 @@ class BipedLimb(nmModule.RigModule, nmIk.Ik, nmFk.FK):
                 twist_driver=lo_twist,
             )
 
-        # if self.bendy:
-        #     if self.side == 'Rt':
-        #         mirror = True
-        #     else:
-        #         mirror = False
-        #     bend_01 = self.src_chain.bend_chain(bone=self.src_chain.joints[0],
-        #                                         ctrl_scale=self.ctrl_scale,
-        #                                         mirror=mirror,
-        #                                         global_scale=self.global_scale.attr)
-        #     bend_02 = self.src_chain.bend_chain(bone=self.src_chain.joints[1],
-        #                                         ctrl_scale=self.ctrl_scale,
-        #                                         mirror=mirror,
-        #                                         global_scale=self.global_scale.attr)
-        #     cmds.parent(bend_01['control'], bend_02['control'],
-        #                 self.control_grp)
-        #     cmds.parent(bend_01['module'], bend_02['module'], self.module_grp)
+        if self.bendy:
+            if self.side == "Rt":
+                mirror = True
+            else:
+                mirror = False
+            bend_01 = self.src_chain.bend_chain(
+                bone=self.src_chain.joints[0],
+                ctrl_scale=self.ctrl_scale,
+                mirror=mirror,
+                global_scale=self.global_scale.attr,
+            )
+            bend_02 = self.src_chain.bend_chain(
+                bone=self.src_chain.joints[1],
+                ctrl_scale=self.ctrl_scale,
+                mirror=mirror,
+                global_scale=self.global_scale.attr,
+            )
+            cmds.parent(bend_01["control"], bend_02["control"], self.control_grp)
+            cmds.parent(bend_01["module"], bend_02["module"], self.module_grp)
 
     def skeleton(self):
         limb_chain = nmChain.Chain(transform_list=self.src_joints,
