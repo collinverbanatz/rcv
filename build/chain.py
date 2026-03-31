@@ -273,9 +273,14 @@ class Chain:
         cmds.connectAttr(twist_loc + ".parentInverseMatrix[0]", mult + ".matrixIn[1]")
         cmds.connectAttr(mult + ".matrixSum", dcm + ".inputMatrix")
         cmds.connectAttr(dcm + ".outputQuatX", qte + ".inputQuatX")
+        cmds.connectAttr(dcm + ".outputQuatY", qte + ".inputQuatY")
+        cmds.connectAttr(dcm + ".outputQuatZ", qte + ".inputQuatZ")
         cmds.connectAttr(dcm + ".outputQuatW", qte + ".inputQuatW")
         cmds.connectAttr(qte + ".outputRotateX", twist_loc + ".rotateX")
         cmds.setAttr(qte + ".inputRotateOrder", 1)
+        cmds.setAttr(
+            qte + ".inputRotateOrder", 0
+        )  # XYZ (match your joint order if needed)
 
         ti = 1 / float(len(self.split_jnt_dict[twist_bone]))
         t_val = ti
@@ -354,8 +359,9 @@ class Chain:
                 jnt,
                 aimVector=(0, 1 * mirror, 0),
                 upVector=(0, 0, 1),
-                worldUpType="none",
-                skip="y",
+                worldUpType="objectrotation",
+                worldUpObject=bone,
+                worldUpVector=(0, 0, 1),
             )
             loc_list.append(loc)
 
