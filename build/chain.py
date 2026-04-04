@@ -558,6 +558,7 @@ class Chain:
             aim_y_src = None
             aim_z_src = None
 
+            # find the current connections to the joint's rotate attributes, ignoring the twist_mdl
             aim_x = (
                 cmds.listConnections(jnt + ".rotateX", s=True, d=False, p=True) or []
             )

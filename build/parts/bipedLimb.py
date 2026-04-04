@@ -212,6 +212,13 @@ class BipedLimb(nmModule.RigModule, nmIk.Ik, nmFk.FK):
             cmds.parent(bend_01["control"], bend_02["control"], self.control_grp)
             cmds.parent(bend_01["module"], bend_02["module"], self.module_grp)
 
+            if self.bendy and self.twisty:
+                self.src_chain.connect_twist_to_bend(
+                    twist_chain=self.src_chain.split_jnt_dict[self.src_chain.joints[0]]
+                )
+                self.src_chain.connect_twist_to_bend(
+                    twist_chain=self.src_chain.split_jnt_dict[self.src_chain.joints[1]]
+                )
     def skeleton(self):
         limb_chain = nmChain.Chain(transform_list=self.src_joints,
                                     prefix=self.side,
