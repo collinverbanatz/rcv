@@ -547,6 +547,74 @@ class Chain:
 
         return {"control": ctrl_grp, "module": rig_grp}
 
+    def connect_twist_to_bend(self, twist_chain):
+        for jnt in twist_chain:
+            twist_mdl = jnt + "_twist_MDL"
+            if not cmds.objExists(twist_mdl):
+                continue
+
+            twist_src = twist_mdl + ".output"
+            aim_x_src = None
+            aim_y_src = None
+            aim_z_src = None
+
+            aim_x = (
+                cmds.listConnections(jnt + ".rotateX", s=True, d=False, p=True) or []
+            )
+            if aim_x and aim_x[0].split(".")[0] != twist_mdl:
+                aim_x_src = aim_x[0]
+            aim_y = (
+                cmds.listConnections(jnt + ".rotateY", s=True, d=False, p=True) or []
+            )
+            if aim_y and aim_y[0].split(".")[0] != twist_mdl:
+                aim_y_src = aim_y[0]
+            aim_z = (
+                cmds.listConnections(jnt + ".rotateZ", s=True, d=False, p=True) or []
+            )
+            if aim_z and aim_z[0].split(".")[0] != twist_mdl:
+                aim_z_src = aim_z[0]
+
+            if not aim_x_src:
+                aim_rot = (
+                    cmds.listConnections(jnt + ".rotate", s=True, d=False, p=True) or []
+                )
+                for src in aim_rot:
+                    if src.endswith(".rotateX") and src.split(".")[0] != twist_mdl:
+                        aim_x_src = src
+                    elif (
+                        src.endswith(".rotateY")
+                        and not aim_y_src
+                        and src.split(".")[0] != twist_mdl
+                    ):
+                        aim_y_src = src
+                    elif (
+                        src.endswith(".rotateZ")
+                        and not aim_z_src
+                        and src.split(".")[0] != twist_mdl
+                    ):
+                        aim_z_src = src
+
+            if not aim_x_src:
+                continue
+
+            for axis in ["X", "Y", "Z"]:
+                for src in (
+                    cmds.listConnections(f"{jnt}.rotate{axis}", s=True, d=False, p=True)
+                    or []
+                ):
+                    cmds.disconnectAttr(src, f"{jnt}.rotate{axis}")
+
+            pma = cmds.createNode("plusMinusAverage", name=jnt + "_twistPlusPMA")
+            cmds.setAttr(pma + ".operation", 1)
+            cmds.connectAttr(aim_x_src, pma + ".input1D[0]")
+            cmds.connectAttr(twist_src, pma + ".input1D[1]")
+            cmds.connectAttr(pma + ".output1D", jnt + ".rotateX")
+
+            if aim_y_src:
+                cmds.connectAttr(aim_y_src, jnt + ".rotateY")
+            if aim_z_src:
+                cmds.connectAttr(aim_z_src, jnt + ".rotateZ")
+
     def get_chain_lengths(self):
         self.bone_lengths = []
 

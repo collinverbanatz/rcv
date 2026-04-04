@@ -113,6 +113,14 @@ class Ikchain(nmModule.RigModule, nmIk.Ik):
             cmds.parent(bend_01["control"], bend_02["control"], self.control_grp)
             cmds.parent(bend_01["module"], bend_02["module"], self.module_grp)
 
+        if self.bendy and self.twisty:
+            self.ik_chain.connect_twist_to_bend(
+                twist_chain=self.ik_chain.split_jnt_dict[self.ik_chain.joints[0]]
+            )
+            self.ik_chain.connect_twist_to_bend(
+                twist_chain=self.ik_chain.split_jnt_dict[self.ik_chain.joints[1]]
+            )
+
         self.build_ikh(scale_attr=self.global_scale)
         cmds.parent(self.ikh, self.ik_joints[0], self.module_grp)
 
