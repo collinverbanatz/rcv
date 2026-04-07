@@ -18,7 +18,7 @@ def build():
     np = r"/run/media/collindv/KINGSTON/Special_problems/tutorial2/Geo/samurai_002.mb"
     gp = r"/run/media/collindv/KINGSTON/Special_problems/tutorial2/Geo/samurai_guides_004.mb"
     sw = Path(
-        "/run/media/collindv/KINGSTON/Special_problems/tutorial2/Geo/samurai_skin_003.json"
+        "/run/media/collindv/KINGSTON/Special_problems/tutorial2/Geo/samurai_skin_004.json"
     )
     clothes = Path(
         "/run/media/collindv/KINGSTON/Special_problems/tutorial2/Geo/samurai_skin_clothes_001.json"
