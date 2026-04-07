@@ -5,10 +5,14 @@ import nmrig.libs.ng as ng
 from pathlib import Path
 import nmrig.libs.skin as nmSkin
 import json as json
+import nmrig.build.parts.fkChain as nmFkChain
+import nmrig.build.parts.ikChain as nmIkChain
 
 reload(nmPart)
 reload(nmSkin)
 reload(ng)
+reload(nmFkChain)
+reload(nmIkChain)
 
 def build():
     np = r"/run/media/collindv/KINGSTON/Special_problems/tutorial2/Geo/samurai_002.mb"
@@ -39,52 +43,199 @@ def build():
 
     cmds.viewFit('perspShape', fitFactor=1, all=True, animate=True)
 
+    # create hips
+    hips = nmFkChain.FkChain(
+        side="Cn",
+        part="hips",
+        guide_list=["Hips"],
+        gimbal=True,
+        offset=True,
+        pad="auto",
+        ctrl_scale=1,
+        remove_last=True,
+        fk_shape="circle",
+        gimbal_shape="circle",
+        offset_shape="circle",
+        model_path=None,
+        guide_path=None,
+    )
+
+    # create shoulders
+    LeftShoulder = nmFkChain.FkChain(
+        side="Lf",
+        part="shoulder",
+        guide_list=["LeftShoulder"],
+        gimbal=True,
+        offset=True,
+        pad="auto",
+        ctrl_scale=1,
+        remove_last=True,
+        fk_shape="circle",
+        gimbal_shape="circle",
+        offset_shape="circle",
+        model_path=None,
+        guide_path=None,
+    )
+    RightShoulder = nmFkChain.FkChain(
+        side="Rt",
+        part="shoulder",
+        guide_list=["RightShoulder"],
+        gimbal=True,
+        offset=True,
+        pad="auto",
+        ctrl_scale=1,
+        remove_last=True,
+        fk_shape="circle",
+        gimbal_shape="circle",
+        offset_shape="circle",
+        model_path=None,
+        guide_path=None,
+    )
+    # create spine
+    spine = nmFkChain.FkChain(
+        side="Cn",
+        part="spine",
+        guide_list=["Spine", "Spine1", "Spine2"],
+        gimbal=True,
+        offset=True,
+        pad="auto",
+        ctrl_scale=1,
+        remove_last=False,
+        fk_shape="circle",
+        gimbal_shape="circle",
+        offset_shape="circle",
+        model_path=None,
+        guide_path=None,
+    )
+
+    # create head
+    head = nmFkChain.FkChain(
+        side="Cn",
+        part="head",
+        guide_list=["Neck", "Head", "HeadTop_End"],
+        gimbal=True,
+        offset=True,
+        pad="auto",
+        ctrl_scale=1,
+        remove_last=True,
+        fk_shape="circle",
+        gimbal_shape="circle",
+        offset_shape="circle",
+        model_path=None,
+        guide_path=None,
+    )
+
     for s in ['Lf', 'Rt']:
 
         if s == 'Lf':
             fs = 'Left'
+            left_arm = nmPart.build_module(
+                module_type="bipedLimb",
+                side=s,
+                part="arm",
+                guide_list=[fs + "Arm", fs + "ForeArm", fs + "Hand"],
+                fk_shape="circle",
+                gimbal_shape="gear_2D",
+                offset_shape="circle",
+                offset_pv=30,
+                ctrl_scale=15,
+            )
         else:
             fs = 'Right'
+            right_arm = nmPart.build_module(
+                module_type="bipedLimb",
+                side=s,
+                part="arm",
+                guide_list=[fs + "Arm", fs + "ForeArm", fs + "Hand"],
+                fk_shape="circle",
+                gimbal_shape="gear_2D",
+                offset_shape="circle",
+                offset_pv=30,
+                ctrl_scale=15,
+            )
 
-        arm = nmPart.build_module(
-            module_type='bipedLimb',
-            side=s,
-            part='arm',
-            guide_list=[
-                fs + 'Arm',
-                fs + 'ForeArm',
-                fs + 'Hand'
-            ],
-            fk_shape='circle',
-            gimbal_shape='gear_2D',
-            offset_shape='circle',
-            offset_pv=30,
-            ctrl_scale=15
-        )
-        
+        # arm = nmPart.build_module(
+        #     module_type='bipedLimb',
+        #     side=s,
+        #     part='arm',
+        #     guide_list=[
+        #         fs + 'Arm',
+        #         fs + 'ForeArm',
+        #         fs + 'Hand'
+        #     ],
+        #     fk_shape='circle',
+        #     gimbal_shape='gear_2D',
+        #     offset_shape='circle',
+        #     offset_pv=30,
+        #     ctrl_scale=15
+        # )
+
     for s in ['Lf', 'Rt']:
 
         if s == 'Lf':
             fs = 'Left'
+            left_leg = nmPart.build_module(
+                module_type="bipedLimb",
+                side=s,
+                part="leg",
+                guide_list=[fs + "UpLeg", fs + "Leg", fs + "Foot"],
+                fk_shape="circle",
+                gimbal_shape="gear_2D",
+                offset_shape="circle",
+                offset_pv=30,
+                ctrl_scale=15,
+            )
         else:
             fs = 'Right'
+            right_leg = nmPart.build_module(
+                module_type="bipedLimb",
+                side=s,
+                part="leg",
+                guide_list=[fs + "UpLeg", fs + "Leg", fs + "Foot"],
+                fk_shape="circle",
+                gimbal_shape="gear_2D",
+                offset_shape="circle",
+                offset_pv=30,
+                ctrl_scale=15,
+            )
 
-        leg = nmPart.build_module(
-            module_type='bipedLimb',
-            side=s,
-            part='leg',
-            guide_list=[
-                fs + 'UpLeg',
-                fs + 'Leg',
-                fs + 'Foot'
-            ],
-            fk_shape='circle',
-            gimbal_shape='gear_2D',
-            offset_shape='circle',
-            offset_pv=30,
-            ctrl_scale=15
-        )
+        # leg = nmPart.build_module(
+        #     module_type='bipedLimb',
+        #     side=s,
+        #     part='leg',
+        #     guide_list=[
+        #         fs + 'UpLeg',
+        #         fs + 'Leg',
+        #         fs + 'Foot'
+        #     ],
+        #     fk_shape='circle',
+        #     gimbal_shape='gear_2D',
+        #     offset_shape='circle',
+        #     offset_pv=30,
+        #     ctrl_scale=15
+        # )
 
+    # parent joints
+    cmds.parent("Cn_hips_01_JNT", "Cn_root_JNT")
+    cmds.parent("Cn_spine_01_JNT", "Cn_hips_01_JNT")
+    cmds.parent("Cn_head_01_JNT", "Cn_spine_01_JNT")
+    cmds.parent("Lf_shoulder_01_JNT", "Cn_spine_03_JNT")
+    cmds.parent("Rt_shoulder_01_JNT", "Cn_spine_03_JNT")
+    cmds.parent("Lf_arm_01_JNT", "Lf_shoulder_01_JNT")
+    cmds.parent("Rt_arm_01_JNT", "Rt_shoulder_01_JNT")
+    cmds.parent("Lf_leg_01_JNT", "Cn_hips_01_JNT")
+    cmds.parent("Rt_leg_01_JNT", "Cn_hips_01_JNT")
+
+    # parent contros
+    cmds.parent("Lf_shoulder", "Cn_spine_03_offset_CTRL")
+    cmds.parent("Rt_shoulder", "Cn_spine_03_offset_CTRL")
+    cmds.parent("Lf_arm", "Lf_shoulder_01_fk_JNT")
+    cmds.parent("Rt_arm", "Rt_shoulder_01_fk_JNT")
+    cmds.parent("Cn_head", "Cn_spine_03_offset_CTRL")
+    cmds.parent("Cn_hips", "Cn_root_02_CTRL")
+    cmds.parent("Cn_spine", "Cn_hips_01_fk_JNT")
+    cmds.parent("Lf_leg", "Cn_hips_01_fk_JNT")
+    cmds.parent("Rt_leg", "Cn_hips_01_fk_JNT")
 
     # apply skin tools to the legs and arms
     with open(sw, "r") as f:
