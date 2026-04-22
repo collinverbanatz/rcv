@@ -67,18 +67,20 @@ class FK:
         for i, pose in enumerate(self.guide_list):
             num = str(i+1).zfill(self.pad)
             if pose == self.guide_list[0]:
-                par = None 
-            fk = nmCtrl.Control(parent=par,
-                    shape=self.fk_shape,
-                    prefix=self.side,
-                    suffix='CTRL',
-                    name=self.part + '_' + num + '_fk',
-                    axis='y',
-                    group_type='main',
-                    rig_type='fk',
-                    position=pose,
-                    rotation=pose,
-                    ctrl_scale=self.ctrl_scale)
+                par = None
+            fk = nmCtrl.Control(
+                parent=par,
+                shape=self.fk_shape,
+                prefix=self.side,
+                suffix="CTRL",
+                name=self.part + "_" + num + "_fk",
+                axis="x",
+                group_type="main",
+                rig_type="fk",
+                position=pose,
+                rotation=pose,
+                ctrl_scale=self.ctrl_scale,
+            )
             par = fk.ctrl
             self.fk_ctrls.append(fk)
             # fk.tag_as_controller()
@@ -87,33 +89,37 @@ class FK:
             self.output_ctrls = self.fk_ctrls
 
             if self.gimbal:
-                gim = nmCtrl.Control(parent=par,
-                                     shape=self.gimbal_shape,
-                                     prefix=self.side,
-                                     suffix='CTRL',
-                                     name=self.part + '_' + num + '_gimbal',
-                                     axis='y',
-                                     group_type='main',
-                                     rig_type='gimbal',
-                                     position=pose,
-                                     rotation=pose,
-                                     ctrl_scale=self.ctrl_scale * 0.8)
+                gim = nmCtrl.Control(
+                    parent=par,
+                    shape=self.gimbal_shape,
+                    prefix=self.side,
+                    suffix="CTRL",
+                    name=self.part + "_" + num + "_gimbal",
+                    axis="x",
+                    group_type="main",
+                    rig_type="gimbal",
+                    position=pose,
+                    rotation=pose,
+                    ctrl_scale=self.ctrl_scale * 0.8,
+                )
             par = gim.ctrl
             self.gim_ctrls.append(gim)
             self.output_ctrls = self.gim_ctrls
             
             if self.offset:
-                off = nmCtrl.Control(parent=par,
-                                     shape=self.offset_shape,
-                                     prefix=self.side,
-                                     suffix='CTRL',
-                                     name=self.part + '_' + num + '_offset',
-                                     axis='y',
-                                     group_type='main',
-                                     rig_type='offset',
-                                     position=pose,
-                                     rotation=pose,
-                                     ctrl_scale=self.ctrl_scale * 0.55)
+                off = nmCtrl.Control(
+                    parent=par,
+                    shape=self.offset_shape,
+                    prefix=self.side,
+                    suffix="CTRL",
+                    name=self.part + "_" + num + "_offset",
+                    axis="x",
+                    group_type="main",
+                    rig_type="offset",
+                    position=pose,
+                    rotation=pose,
+                    ctrl_scale=self.ctrl_scale * 0.55,
+                )
                 self.ofst_ctrls.append(off)
                 self.output_ctrls = self.ofst_ctrls
 

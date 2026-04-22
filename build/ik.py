@@ -79,45 +79,51 @@ class Ik:
         self.ik_ctrl_grp = cmds.group(empty=True,
                                       name=self.base_name + '_IK_CTRL_GRP')
 
-        self.base_ctrl = nmCtrl.Control(parent=self.ik_ctrl_grp,
-                                        shape='circle',
-                                        prefix=self.side,
-                                        suffix='CTRL',
-                                        name=self.part + '_IK_base',
-                                        axis='y',
-                                        group_type='main',
-                                        rig_type='primary',
-                                        position=self.guide_list[0],
-                                        ctrl_scale=self.ctrl_scale)
+        self.base_ctrl = nmCtrl.Control(
+            parent=self.ik_ctrl_grp,
+            shape="square",
+            prefix=self.side,
+            suffix="CTRL",
+            name=self.part + "_IK_base",
+            axis="y",
+            group_type="main",
+            rig_type="primary",
+            position=self.guide_list[0],
+            ctrl_scale=self.ctrl_scale,
+        )
         attr_util.lock_and_hide(node=self.base_ctrl.ctrl,
                                 translate=False,
                                 rotate=False)
 
-        self.main_ctrl = nmCtrl.Control(parent=self.ik_ctrl_grp,
-                                        shape='circle',
-                                        prefix=self.side,
-                                        suffix='CTRL',
-                                        name=self.part + '_IK_main',
-                                        axis='y',
-                                        group_type='main',
-                                        rig_type='primary',
-                                        position=self.guide_list[-1],
-                                        ctrl_scale=self.ctrl_scale)
+        self.main_ctrl = nmCtrl.Control(
+            parent=self.ik_ctrl_grp,
+            shape="square",
+            prefix=self.side,
+            suffix="CTRL",
+            name=self.part + "_IK_main",
+            axis="y",
+            group_type="main",
+            rig_type="primary",
+            position=self.guide_list[-1],
+            ctrl_scale=self.ctrl_scale,
+        )
         attr_util.lock_and_hide(node=self.main_ctrl.ctrl,
                                 translate=False,
                                 rotate=False)
 
         if self.pv_guide:
-            self.pv_ctrl = nmCtrl.Control(parent=self.ik_ctrl_grp,
-                                          shape='gear_2D',
-                                          prefix=self.side,
-                                          suffix='CTRL',
-                                          name=self.part + '_IK_pv',
-                                          axis='y',
-                                          group_type='main',
-                                          rig_type='pv',
-                                          position=self.pv_guide,
-                                          ctrl_scale=self.ctrl_scale)
+            self.pv_ctrl = nmCtrl.Control(
+                parent=self.ik_ctrl_grp,
+                shape="sphere3",
+                prefix=self.side,
+                suffix="CTRL",
+                name=self.part + "_IK_pv",
+                axis="y",
+                group_type="main",
+                rig_type="pv",
+                position=self.pv_guide,
+                ctrl_scale=self.ctrl_scale,
+            )
             attr_util.lock_and_hide(node=self.pv_ctrl.ctrl, translate=False)
 
     def build_ik_chain(self):

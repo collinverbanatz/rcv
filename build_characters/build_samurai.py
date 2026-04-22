@@ -15,20 +15,20 @@ reload(nmFkChain)
 reload(nmIkChain)
 
 def build():
-    np = r"/run/media/collindv/KINGSTON/Special_problems/tutorial2/Geo/samurai_002.mb"
-    gp = r"/run/media/collindv/KINGSTON/Special_problems/tutorial2/Geo/samurai_guides_004.mb"
+    np = r"/run/media/collindv/KINGSTON/Special_problems/tutorial2/Geo/samurai_004.mb"
+    gp = r"/run/media/collindv/KINGSTON/Special_problems/tutorial2/Geo/samurai_guides_006.mb"
     sw = Path(
-        "/run/media/collindv/KINGSTON/Special_problems/tutorial2/Geo/samurai_skin_004.json"
+        "/run/media/collindv/KINGSTON/Special_problems/tutorial2/Geo/samurai_skin_006.json"
     )
     clothes = Path(
-        "/run/media/collindv/KINGSTON/Special_problems/tutorial2/Geo/samurai_skin_clothes_001.json"
+        "/run/media/collindv/KINGSTON/Special_problems/tutorial2/Geo/samurai_skin_clothes_003.json"
     )
 
     #windows
-    # np = r"D:\Special_problems\tutorial2\Geo\samurai_002.mb"
-    # gp = r"D:\Special_problems\tutorial2\Geo\samurai_guides_004.mb"
-    # sw = Path(r"D:\Special_problems\tutorial2\Geo\samurai_skin_003.json")
-    # clothes = Path(r"D:\Special_problems\tutorial2\Geo\samurai_skin_clothes_001.json")
+    # np = r"D:\Special_problems\tutorial2\Geo\samurai_004.mb"
+    # gp = r"D:\Special_problems\tutorial2\Geo\samurai_guides_006.mb"
+    # sw = Path(r"D:\Special_problems\tutorial2\Geo\samurai_skin_006.json")
+    # clothes = Path(r"D:\Special_problems\tutorial2\Geo\samurai_skin_clothes_003.json")
 
 
     cmds.file(new=True, f=True)
@@ -135,7 +135,7 @@ def build():
                 part="arm",
                 guide_list=[fs + "Arm", fs + "ForeArm", fs + "Hand"],
                 fk_shape="circle",
-                gimbal_shape="gear_2D",
+                gimbal_shape="circle",
                 offset_shape="circle",
                 offset_pv=30,
                 ctrl_scale=15,
@@ -148,7 +148,7 @@ def build():
                 part="arm",
                 guide_list=[fs + "Arm", fs + "ForeArm", fs + "Hand"],
                 fk_shape="circle",
-                gimbal_shape="gear_2D",
+                gimbal_shape="circle",
                 offset_shape="circle",
                 offset_pv=30,
                 ctrl_scale=15,
@@ -180,7 +180,7 @@ def build():
                 part="leg",
                 guide_list=[fs + "UpLeg", fs + "Leg", fs + "Foot"],
                 fk_shape="circle",
-                gimbal_shape="gear_2D",
+                gimbal_shape="circle",
                 offset_shape="circle",
                 offset_pv=30,
                 ctrl_scale=15,
@@ -193,7 +193,7 @@ def build():
                 part="leg",
                 guide_list=[fs + "UpLeg", fs + "Leg", fs + "Foot"],
                 fk_shape="circle",
-                gimbal_shape="gear_2D",
+                gimbal_shape="circle",
                 offset_shape="circle",
                 offset_pv=30,
                 ctrl_scale=15,
@@ -214,6 +214,15 @@ def build():
         #     offset_pv=30,
         #     ctrl_scale=15
         # )
+
+    # rename hair group was too lazy to open geo and rename it there lolz
+    full_paths = cmds.ls("hair", long=True)
+
+    if full_paths:
+        new_name = cmds.rename(full_paths[0], "hair_grp")
+        print(f"Renamed {full_paths[0]} to {new_name}")
+    else:
+        print("No object named 'hair' found.")
 
     # parent joints
     cmds.parent("Cn_hips_01_JNT", "Cn_root_JNT")
@@ -248,6 +257,7 @@ def build():
 
     joint_list = ng.get_influences_from_ng_json(sw)
     joint_list_clothes = ng.get_influences_from_ng_json(clothes)
+    joint_list_hair = ["Cn_head_02_fk_JNT"]
 
     if not cmds.ls(cmds.listHistory('samurai'), type='skinCluster'):
         print("Joint list:", joint_list)
@@ -256,12 +266,55 @@ def build():
         nmSkin.skin_mesh(bind_joints=joint_list, geometry="samurai", name=None, dual_quaternion=True)
         print("Skin cluster created.")
 
-    if not cmds.ls(cmds.listHistory('pasted__hakama3'), type='skinCluster'):
-        nmSkin.skin_mesh(bind_joints=joint_list_clothes, geometry="pasted__hakama3", name=None, dual_quaternion=True)
+    if not cmds.ls(cmds.listHistory("pasted__hakama4"), type="skinCluster"):
+        nmSkin.skin_mesh(
+            bind_joints=joint_list_clothes,
+            geometry="pasted__hakama4",
+            name=None,
+            dual_quaternion=True,
+        )
 
-    
+    if not cmds.ls(cmds.listHistory("Hair_eyes"), type="skinCluster"):
+        nmSkin.skin_mesh(
+            bind_joints=joint_list_clothes,
+            geometry="Hair_eyes",
+            name=None,
+            dual_quaternion=True,
+        )
+
+    # # 1. Get all mesh shapes inside the group
+    #     hair_shapes = cmds.listRelatives("hair_grp", ad=True, type='mesh', fullPath=True)
+
+    #     if hair_shapes:
+    #         # 2. Get the unique parent transforms of those shapes
+    #         # We use a set to ensure we don't try to skin the same object twice if it has multiple shapes
+    #         hair_transforms = list(set(cmds.listRelatives(hair_shapes, parent=True, fullPath=True)))
+
+    #         for geo in hair_transforms:
+    #             # 3. Final safety check: does it exist and is it already skinned?
+    #             if cmds.objExists(geo):
+    #                 existing_skin = cmds.ls(cmds.listHistory(geo), type='skinCluster')
+
+    #                 if not existing_skin:
+    #                     print(f"Skinning {geo} to {joint_list_hair}")
+    #                     try:
+    #                         nmSkin.skin_mesh(
+    #                             bind_joints=joint_list_hair,
+    #                             geometry=geo,
+    #                             name=None,
+    #                             dual_quaternion=True
+    #                         )
+    #                     except Exception as e:
+    #                         print(f"Failed to skin {geo}. Error: {e}")
+    #                 else:
+    #                     print(f"Skipping {geo}, skinCluster already exists: {existing_skin}")
+    #     else:
+    #         print("No mesh geometry found inside hair_grp.")
+
     ng.apply_ng_skin_weights(sw, "samurai")
-    ng.apply_ng_skin_weights(clothes, "pasted__hakama3")
+    ng.apply_ng_skin_weights(clothes, "pasted__hakama4")
     print("Weights applied from ngSkinTools JSON.")
+
+    cmds.delete("Hips")
 
     ng.cleanup_ng_data_nodes()

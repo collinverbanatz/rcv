@@ -410,11 +410,11 @@ class Chain:
         # build controls for bend system
         mid_ctrl = nmCtrl.Control(
             parent=ctrl_grp,
-            shape="circle",
+            shape="square",
             prefix=None,
             suffix="CTRL",
             name=bone.replace("JNT", "bendy"),
-            axis="y",
+            axis="x",
             group_type="main",
             rig_type="bendy",
             position=m,
