@@ -293,6 +293,20 @@ class Chain:
             cmds.setAttr(mdl + ".input2", twist_percent)
             cmds.connectAttr(mdl + ".output", jnt + ".rotateX")
             t_val += ti
+        end_jnt = cmds.listRelatives(twist_bone, children=True, type="joint")[0]
+
+        pma = cmds.createNode("plusMinusAverage", name=end_jnt + "_twist_PMA")
+        cmds.setAttr(pma + ".operation", 1)
+
+        # get existing rotation source
+        existing = cmds.listConnections(end_jnt + ".rotateX", s=True, d=False, p=True)
+
+        if existing:
+            cmds.disconnectAttr(existing[0], end_jnt + ".rotateX")
+            cmds.connectAttr(existing[0], pma + ".input1D[0]")
+
+        cmds.connectAttr(twist_loc + ".rotateX", pma + ".input1D[1]")
+        cmds.connectAttr(pma + ".output1D", end_jnt + ".rotateX")
 
     def bend_chain(self, bone, ctrl_scale, spans=16, mirror=False, global_scale=None):
         if mirror:

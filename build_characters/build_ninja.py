@@ -181,6 +181,7 @@ def build():
                 offset_pv=30,
                 ctrl_scale=15,
             )
+    cmds.connectAttr("Lf_arm_08_JNT.rotate", "Lf_arm_09_JNT.rotate", force=True)
 
     # parent joints
     cmds.parent("Cn_hips_01_JNT", "Cn_root_JNT")
